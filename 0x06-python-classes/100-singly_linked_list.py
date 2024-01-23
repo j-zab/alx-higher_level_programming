@@ -1,67 +1,82 @@
 #!/usr/bin/python3
+"""module for a singly linked list"""
+
+
 class Node:
+    """"defines  the  node in e class"""
+
     def __init__(self, data, next_node=None):
-        """Defines a node of a singly linked list"""
+        """initializes the node with instance vars"""
+
         self.data = data
         self.next_node = next_node
 
     @property
     def data(self):
-        """data getter"""
-        return self.__data
+        """retrieves the attribute of the data """
+
+        return (self.__data)
 
     @data.setter
     def data(self, value):
-        """data setter"""
-        if type(value) != int:
-            raise TypeError("data must be an integer")
+        """relays the data attribute"""
+
+        if not isinstance(value, int):
+            raise TypeError('data must be an int')
         self.__data = value
 
     @property
     def next_node(self):
-        """next_node getter"""
-        return self.__next_node
+        """get next_node attribute
+        Returns: next node
+        """
+
+        return (self.__next_node)
 
     @next_node.setter
     def next_node(self, value):
-        """next_node setter"""
-        if value is not None and type(value) is not Node:
-            raise TypeError("next_node must be a Node object")
+        """sets the value of next node"""
+
+        if (value is not None and not isinstance(value, Node)):
+            raise TypeError('next_node must be a Node object')
+
         self.__next_node = value
 
 
 class SinglyLinkedList:
+    """defines a singly linked list"""
+
     def __init__(self):
-        """Defines a singly linked list"""
-        self.__head = None
+        """Initializes the singly linked list"""
 
-    def sorted_insert(self, value):
-        new = Node(value)
-        tmp = self.__head
-        add_start = False
-
-        if not self.__head:
-            self.__head = new
-            new.next_node = None
-        else:
-            if value < self.__head.data:
-                add_start = True
-            while tmp.next_node and value > tmp.next_node.data\
-                    and not add_start:
-                tmp = tmp.next_node
-            if not add_start:
-                    new.next_node = tmp.next_node
-                    tmp.next_node = new
-            else:
-                new.next_node = tmp
-                self.__head = new
-            new.data = value
+        self.head = None
 
     def __str__(self):
-        s = ""
-        current = self.__head
+        """make list printable"""
 
-        while current:
-            s += str(current.data) + '\n'
-            current = current.next_node
-        return s[: -1]
+        printsll = ""
+        location = self.head
+        while location:
+            printsll += str(location.data) + "\n"
+            location = location.next_node
+        return printsll[:-1]
+
+    def sorted_insert(self, value):
+        """insert in a sorted fashion
+        Args:
+            value:  sets the value of the node
+        """
+        new = Node(value)
+        if not self.head:
+            self.head = new
+            return
+        if value < self.head.data:
+            new.next_node = self.head
+            self.head = new
+            return
+        location = self.head
+        while location.next_node and location.next_node.data < value:
+            location = location.next_node
+        if location.next_node:
+            new.next_node = location.next_node
+        location.next_node = new
